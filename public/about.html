@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Email-Updatable Website</title>
+    <style>
+        /* Reset default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styles */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+            background-color: #fafafa;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #fff;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+        }
+
+        nav li {
+            list-style: none;
+            margin: 0 1rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #000;
+        }
+
+        /* Main content */
+        main {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+        }
+
+        main h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #222;
+            text-align: center;
+        }
+
+        main p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #fff;
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid #eaeaea;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            main h2 {
+                font-size: 1.5rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/content')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('about-content').innerHTML = data.about;
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Email-Updatable Website</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/blog">Blog</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h2>About Us</h2>
+        <div id="about-content" class="content"></div>
+    </main>
+    <footer>
+        <p>&copy; 2023 Email-Updatable Website</p>
+    </footer>
+</body>
+</html>
