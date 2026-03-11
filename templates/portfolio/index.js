@@ -1,3 +1,5 @@
+const { escapeHtml } = require('../_helpers');
+
 module.exports = {
   name: 'Portfolio',
   description: 'Creative, bold design with large typography for creatives and photographers',
@@ -5,8 +7,9 @@ module.exports = {
 
   renderPage(pageName, { tenant, content, blogPosts }) {
     const subdomain = tenant.subdomain;
-    const siteTitle = tenant.site_title || 'My Portfolio';
-    const tagline = tenant.tagline || '';
+    const siteTitle = escapeHtml(tenant.site_title || 'My Portfolio');
+    const tagline = escapeHtml(tenant.site_tagline || '');
+    blogPosts = (blogPosts || []).map(p => ({ ...p, title: escapeHtml(p.title), image_url: escapeHtml(p.image_url) }));
 
     const navLinks = [
       { href: `/site/${subdomain}/`, label: 'Home' },

@@ -46,6 +46,15 @@ router.post('/api/signup', async (req, res) => {
     if (subdomainClean.length < 3 || subdomainClean.length > 30) {
       return res.status(400).json({ error: 'Subdomain must be 3-30 alphanumeric characters' });
     }
+    if (/^-|-$/.test(subdomainClean)) {
+      return res.status(400).json({ error: 'Subdomain cannot start or end with a hyphen' });
+    }
+
+    // Block reserved subdomain names
+    const reserved = ['api', 'admin', 'www', 'mail', 'smtp', 'imap', 'ftp', 'site', 'preview', 'confirm', 'verify', 'payment', 'webhook', 'webhooks', 'static', 'uploads', 'landing', 'app', 'dashboard', '_previews'];
+    if (reserved.includes(subdomainClean)) {
+      return res.status(400).json({ error: 'This subdomain is reserved. Please choose another.' });
+    }
 
     // Check uniqueness
     if (queries.getTenantByEmail(email.toLowerCase())) {

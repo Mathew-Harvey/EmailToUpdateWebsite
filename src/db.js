@@ -157,7 +157,7 @@ const queries = {
   createTenant({ email, name, subdomain, template, siteTitle }) {
     const id = uuidv4();
     const verificationToken = uuidv4();
-    stmts.createTenant.run(id, email, name || '', subdomain, template || 'starter', siteTitle || 'My Website', verificationToken);
+    stmts.createTenant.run(id, email.toLowerCase().trim(), name || '', subdomain, template || 'starter', siteTitle || 'My Website', verificationToken);
     return stmts.getTenantById.get(id);
   },
 

@@ -23,7 +23,7 @@ app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), (req, re
     res.json(result);
   } catch (err) {
     logger.error('Stripe webhook error', { error: err.message });
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'Webhook processing failed' });
   }
 });
 

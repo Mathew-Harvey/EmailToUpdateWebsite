@@ -170,7 +170,9 @@ async function sendConfirmationRequest(tenant, pendingUpdate, previewUrl) {
  * @param {string} section - The section or type that was updated
  */
 async function sendPublishedNotification(tenant, section) {
-  const siteUrl = `${config.appUrl}/site/${tenant.subdomain}`;
+  const siteUrl = tenant.custom_domain
+    ? `https://${tenant.custom_domain}`
+    : `${config.appUrl}/site/${tenant.subdomain}`;
 
   const bodyHtml = `
     <h2 style="margin:0 0 16px; color:#111827; font-size:20px;">Your site has been updated!</h2>

@@ -1,3 +1,5 @@
+const { escapeHtml } = require('../_helpers');
+
 module.exports = {
   name: 'Personal',
   description: 'Warm, cozy blog-focused layout with rich typography for personal brands and writers',
@@ -5,8 +7,9 @@ module.exports = {
 
   renderPage(pageName, { tenant, content, blogPosts }) {
     const subdomain = tenant.subdomain;
-    const siteTitle = tenant.site_title || 'My Site';
-    const tagline = tenant.site_tagline || '';
+    const siteTitle = escapeHtml(tenant.site_title || 'My Site');
+    const tagline = escapeHtml(tenant.site_tagline || '');
+    blogPosts = (blogPosts || []).map(p => ({ ...p, title: escapeHtml(p.title), image_url: escapeHtml(p.image_url) }));
 
     const navLinks = [
       { href: `/site/${subdomain}/`, label: 'Home', page: 'index' },
