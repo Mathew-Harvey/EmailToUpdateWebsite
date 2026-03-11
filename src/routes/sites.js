@@ -8,7 +8,8 @@ const logger = require('../logger');
 
 // ─── Preview pages ─────────────────────────────────────────────────────────────
 router.get('/preview/:token', (req, res) => {
-  const previewPath = path.join(config.paths.sites, '_previews', `${req.params.token}.html`);
+  const safeToken = req.params.token.replace(/[^a-zA-Z0-9]/g, '');
+  const previewPath = path.join(config.paths.sites, '_previews', `${safeToken}.html`);
   if (fs.existsSync(previewPath)) {
     res.sendFile(previewPath);
   } else {
@@ -62,13 +63,13 @@ router.get('/confirm/:token', (req, res) => {
             Preview the change →
           </a>
           <div class="actions">
-            <button class="btn btn-publish" onclick="confirm('publish')">Publish Now</button>
-            <button class="btn btn-cancel" onclick="confirm('reject')">Cancel</button>
+            <button class="btn btn-publish" onclick="handleAction('publish')">Publish Now</button>
+            <button class="btn btn-cancel" onclick="handleAction('reject')">Cancel</button>
           </div>
           <div id="result"></div>
         </div>
         <script>
-          async function confirm(action) {
+          async function handleAction(action) {
             const res = await fetch('/api/confirm/' + '${pending.confirmation_token}' + '/' + action, { method: 'POST' });
             const data = await res.json();
             const el = document.getElementById('result');
@@ -152,9 +153,13 @@ router.get('/site/:subdomain/:page', (req, res) => {
 });
 
 function serveSitePage(subdomain, page, res) {
-  // Sanitize page name
+  // Sanitize inputs to prevent path traversal
+  const safeSubdomain = subdomain.replace(/[^a-zA-Z0-9-]/g, '');
   const safePage = page.replace(/[^a-zA-Z0-9-]/g, '');
-  const sitePath = path.join(config.paths.sites, subdomain, `${safePage}.html`);
+  if (!safeSubdomain || !safePage) {
+    return res.status(400).send(notFoundPage('Invalid request'));
+  }
+  const sitePath = path.join(config.paths.sites, safeSubdomain, `${safePage}.html`);
 
   if (fs.existsSync(sitePath)) {
     res.sendFile(sitePath);
@@ -174,6 +179,10 @@ function serveSitePage(subdomain, page, res) {
     }
     res.status(404).send(notFoundPage('Site not found'));
   }
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function notFoundPage(message) {
@@ -196,7 +205,7 @@ function notFoundPage(message) {
     <body>
       <div class="container">
         <h1>Not Found</h1>
-        <p>${message}</p>
+        <p>${escapeHtml(message)}</p>
         <a href="/">← Back to EmailSite</a>
       </div>
     </body>

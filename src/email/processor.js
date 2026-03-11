@@ -6,7 +6,14 @@ const { saveImages } = require('./uploads');
 const sender = require('./sender');
 const { generateSite, generatePreview } = require('../sites/generator');
 
-const openai = new OpenAI({ apiKey: config.openai.apiKey });
+let openai = null;
+try {
+  if (config.openai.apiKey) {
+    openai = new OpenAI({ apiKey: config.openai.apiKey });
+  }
+} catch (err) {
+  logger.warn('OpenAI not initialized', { error: err.message });
+}
 
 /**
  * Use GPT to extract and clean up website content from an email body.
@@ -16,6 +23,10 @@ const openai = new OpenAI({ apiKey: config.openai.apiKey });
  * @returns {Promise<string>} Cleaned content suitable for a website section
  */
 async function extractContent(emailBody, section) {
+  if (!openai) {
+    logger.warn('OpenAI not configured, using raw email body');
+    return emailBody;
+  }
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
@@ -75,8 +86,10 @@ async function processEmail(emailData) {
     return;
   }
 
-  if (tenant.subscription_status === 'canceled') {
-    logger.info('Email from canceled subscription', { senderEmail, tenantId: tenant.id });
+  // Check subscription status
+  const isTrialExpired = tenant.subscription_status === 'trialing' && tenant.trial_ends_at && new Date(tenant.trial_ends_at) < new Date();
+  if (tenant.subscription_status === 'canceled' || isTrialExpired) {
+    logger.info('Email from inactive subscription', { senderEmail, tenantId: tenant.id, status: tenant.subscription_status });
     await sender.sendGenericReply(
       tenant.email,
       'Subscription Inactive',

@@ -16,6 +16,7 @@ class EmailPoller {
     this._running = false;
     this._reconnectAttempts = 0;
     this._reconnectTimer = null;
+    this._reconnecting = false;
   }
 
   /**
@@ -248,7 +249,8 @@ class EmailPoller {
    * Schedule a reconnection attempt with exponential backoff.
    */
   _scheduleReconnect() {
-    if (!this._running) return;
+    if (!this._running || this._reconnecting) return;
+    this._reconnecting = true;
 
     // Clear existing timers
     if (this._pollTimer) {
@@ -285,6 +287,7 @@ class EmailPoller {
 
     this._reconnectTimer = setTimeout(() => {
       this._reconnectTimer = null;
+      this._reconnecting = false;
       if (this._running) {
         this._connect();
       }

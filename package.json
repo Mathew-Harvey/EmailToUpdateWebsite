@@ -6,13 +6,21 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
+    "test": "node tests/deployment.test.js",
+    "prestart": "node tests/deployment.test.js",
     "migrate": "node src/db.js --migrate"
   },
-  "keywords": ["email", "website", "cms", "saas"],
+  "keywords": [
+    "email",
+    "website",
+    "cms",
+    "saas"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "imap": "^0.8.19",

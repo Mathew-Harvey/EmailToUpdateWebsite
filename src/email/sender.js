@@ -10,15 +10,19 @@ const FROM_ADDRESS = `EmailSite <${config.smtp.auth.user || 'noreply@emailsite.c
 let _transporter = null;
 function getTransporter() {
   if (!_transporter) {
-    _transporter = nodemailer.createTransport({
-      host: config.smtp.host,
-      port: config.smtp.port,
-      secure: config.smtp.port === 465,
-      auth: config.smtp.auth,
-      connectionTimeout: 5000,
-      greetingTimeout: 5000,
-      socketTimeout: 5000,
-    });
+    if (process.env.NODE_ENV === 'test') {
+      _transporter = nodemailer.createTransport({ jsonTransport: true });
+    } else {
+      _transporter = nodemailer.createTransport({
+        host: config.smtp.host,
+        port: config.smtp.port,
+        secure: config.smtp.port === 465,
+        auth: config.smtp.auth,
+        connectionTimeout: 5000,
+        greetingTimeout: 5000,
+        socketTimeout: 5000,
+      });
+    }
   }
   return _transporter;
 }

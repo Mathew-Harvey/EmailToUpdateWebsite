@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const config = require('./config');
@@ -25,6 +26,13 @@ app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), (req, re
     res.status(400).json({ error: err.message });
   }
 });
+
+// ─── CORS ───────────────────────────────────────────────────────────────────────
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+}));
 
 // ─── Body parsers ──────────────────────────────────────────────────────────────
 app.use(express.json());
@@ -84,7 +92,8 @@ app.use((err, req, res, _next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// ─── Start server ──────────────────────────────────────────────────────────────
+// ─── Start server (skip when imported for testing) ──────────────────────────
+if (process.env.NODE_ENV !== 'test') {
 app.listen(config.port, () => {
   logger.info(`EmailSite server running on port ${config.port}`);
   logger.info(`Landing page: ${config.appUrl}`);
@@ -113,5 +122,6 @@ app.listen(config.port, () => {
     }
   }, 60000);
 });
+}
 
 module.exports = app;
