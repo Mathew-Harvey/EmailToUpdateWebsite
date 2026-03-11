@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — EmailSite</title>
+  <meta name="description" content="Start your free 14-day trial. No credit card required.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1E293B;
+      background: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 35%, #F0F9FF 70%, #F8FAFC 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, h4 { font-family: 'Space Grotesk', 'Inter', sans-serif; line-height: 1.2; }
+
+    /* ─── Navbar ──────────────────────────────────────────────────── */
+    .navbar {
+      background: rgba(248, 250, 252, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+      padding: 0 24px;
+    }
+    .navbar-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0F172A;
+    }
+    .logo span { color: #2563EB; }
+    .back-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #2563EB; }
+    .back-link svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ─── Main ────────────────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+    .signup-container {
+      width: 100%;
+      max-width: 480px;
+    }
+    .signup-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .signup-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 8px;
+    }
+    .signup-header p {
+      font-size: 16px;
+      color: #64748B;
+      line-height: 1.5;
+    }
+
+    /* ─── Form Card ───────────────────────────────────────────────── */
+    .form-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.04);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: #1E293B;
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      outline: none;
+      transition: all 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%2394A3B8'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #2563EB;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .form-group input.error,
+    .form-group select.error {
+      border-color: #EF4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    /* Subdomain input group */
+    .subdomain-group {
+      display: flex;
+      align-items: center;
+    }
+    .subdomain-group input {
+      border-radius: 10px 0 0 10px;
+      border-right: none;
+    }
+    .subdomain-group input:focus {
+      border-right: none;
+    }
+    .subdomain-suffix {
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #64748B;
+      background: #E2E8F0;
+      border: 1.5px solid #E2E8F0;
+      border-left: none;
+      border-radius: 0 10px 10px 0;
+      white-space: nowrap;
+    }
+
+    /* Error text */
+    .field-error {
+      font-size: 13px;
+      color: #EF4444;
+      margin-top: 4px;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #2563EB, #7C3AED);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      margin-top: 8px;
+    }
+    .btn-submit:hover {
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+      transform: translateY(-1px);
+    }
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Form Footer ─────────────────────────────────────────────── */
+    .form-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #94A3B8;
+      line-height: 1.6;
+    }
+    .form-footer a {
+      color: #2563EB;
+      font-weight: 500;
+    }
+    .form-footer a:hover { text-decoration: underline; }
+
+    /* ─── Success State ───────────────────────────────────────────── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .success-state.visible { display: block; }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      background: #ECFDF5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .success-icon svg { width: 36px; height: 36px; fill: #059669; }
+    .success-state h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 10px;
+    }
+    .success-state p {
+      font-size: 15px;
+      color: #64748B;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .success-email {
+      font-weight: 600;
+      color: #2563EB;
+    }
+
+    /* ─── Error Banner ────────────────────────────────────────────── */
+    .error-banner {
+      display: none;
+      padding: 12px 16px;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #DC2626;
+      line-height: 1.5;
+    }
+    .error-banner.visible { display: block; }
+
+    /* ─── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 520px) {
+      .form-card { padding: 28px 20px; }
+      .signup-header h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="logo">Email<span>Site</span></a>
+      <a href="/" class="back-link">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Back to home
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="signup-container">
+
+      <div class="signup-header">
+        <h1>Start your free trial</h1>
+        <p>14 days free. No credit card required. Set up in under a minute.</p>
+      </div>
+
+      <div class="form-card">
+        <!-- Error Banner -->
+        <div class="error-banner" id="errorBanner"></div>
+
+        <!-- Signup Form -->
+        <form id="signupForm" novalidate>
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required autocomplete="name">
+            <div class="field-error" id="nameError">Please enter your full name.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="jane@example.com" required autocomplete="email">
+            <div class="field-error" id="emailError">Please enter a valid email address.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="subdomain">Choose Your Subdomain</label>
+            <div class="subdomain-group">
+              <input type="text" id="subdomain" name="subdomain" placeholder="mysite" required autocomplete="off" pattern="[a-z0-9\-]+">
+              <span class="subdomain-suffix">.emailsite.co</span>
+            </div>
+            <div class="field-error" id="subdomainError">Only lowercase letters, numbers, and hyphens allowed.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="template">Choose a Template</label>
+            <select id="template" name="template" required>
+              <option value="" disabled selected>Select a template...</option>
+              <option value="starter">Starter - Clean and minimal</option>
+              <option value="business">Business - Professional and polished</option>
+              <option value="portfolio">Portfolio - Showcase your work</option>
+              <option value="restaurant">Restaurant - Warm and inviting</option>
+              <option value="consultant">Consultant - Trust-building design</option>
+              <option value="retail">Retail - Bright and engaging</option>
+              <option value="nonprofit">Nonprofit - Mission-driven</option>
+              <option value="personal">Personal - Your corner of the internet</option>
+              <option value="trades">Trades - Sturdy and reliable</option>
+              <option value="wellness">Wellness - Calm and soothing</option>
+            </select>
+            <div class="field-error" id="templateError">Please choose a template.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="siteTitle">Site Title</label>
+            <input type="text" id="siteTitle" name="siteTitle" placeholder="My Awesome Website" required autocomplete="off">
+            <div class="field-error" id="siteTitleError">Please enter a title for your site.</div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">Start Free Trial</button>
+        </form>
+
+        <!-- Success State -->
+        <div class="success-state" id="successState">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          </div>
+          <h2>Check your email!</h2>
+          <p>We sent a verification link to</p>
+          <p class="success-email" id="successEmail"></p>
+          <p style="margin-top:16px;">Click the link in the email to verify your account and get started.</p>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        By signing up you agree to our Terms of Service and Privacy Policy.<br>
+        Already have an account? <a href="/">Go to homepage</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorBanner = document.getElementById('errorBanner');
+    const successState = document.getElementById('successState');
+
+    // ─── Validation helpers ────────────────────────────────────────
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function isValidSubdomain(sub) {
+      return /^[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?$/.test(sub);
+    }
+
+    function showFieldError(fieldId, errorId) {
+      document.getElementById(fieldId).classList.add('error');
+      document.getElementById(errorId).classList.add('visible');
+    }
+
+    function clearFieldError(fieldId, errorId) {
+      document.getElementById(fieldId).classList.remove('error');
+      document.getElementById(errorId).classList.remove('visible');
+    }
+
+    function clearAllErrors() {
+      errorBanner.classList.remove('visible');
+      ['name', 'email', 'subdomain', 'template', 'siteTitle'].forEach(f => {
+        const errorId = f + 'Error';
+        const el = document.getElementById(f);
+        if (el) el.classList.remove('error');
+        const errEl = document.getElementById(errorId);
+        if (errEl) errEl.classList.remove('visible');
+      });
+    }
+
+    // ─── Real-time validation ──────────────────────────────────────
+    document.getElementById('subdomain').addEventListener('input', function() {
+      this.value = this.value.toLowerCase().replace(/[^a-z0-9\-]/g, '');
+    });
+
+    // ─── Form submission ───────────────────────────────────────────
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      clearAllErrors();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subdomain = document.getElementById('subdomain').value.trim();
+      const template = document.getElementById('template').value;
+      const siteTitle = document.getElementById('siteTitle').value.trim();
+
+      let hasError = false;
+
+      if (!name) {
+        showFieldError('name', 'nameError');
+        hasError = true;
+      }
+      if (!email || !isValidEmail(email)) {
+        showFieldError('email', 'emailError');
+        hasError = true;
+      }
+      if (!subdomain || !isValidSubdomain(subdomain)) {
+        showFieldError('subdomain', 'subdomainError');
+        hasError = true;
+      }
+      if (!template) {
+        showFieldError('template', 'templateError');
+        hasError = true;
+      }
+      if (!siteTitle) {
+        showFieldError('siteTitle', 'siteTitleError');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Disable button, show loading
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Creating your account...';
+
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, subdomain, template, siteTitle }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Something went wrong. Please try again.');
+        }
+
+        // Show success state
+        form.style.display = 'none';
+        document.getElementById('successEmail').textContent = email;
+        successState.classList.add('visible');
+
+      } catch (err) {
+        errorBanner.textContent = err.message;
+        errorBanner.classList.add('visible');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Start Free Trial';
+      }
+    });
+  </script>
+</body>
+</html>

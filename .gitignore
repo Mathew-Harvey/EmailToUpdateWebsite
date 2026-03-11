@@ -89,3 +89,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# EmailSite data
+data/
+sites/
+uploads/
+combined.log
+error.log

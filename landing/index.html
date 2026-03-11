@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmailSite — Update Your Website by Sending an Email</title>
+  <meta name="description" content="No logins. No dashboards. No code. Just send an email and your website updates instantly. Try EmailSite free for 14 days.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Reset & Base ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1E293B;
+      background: #F8FAFC;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, h4 { font-family: 'Space Grotesk', 'Inter', sans-serif; line-height: 1.2; }
+
+    /* ─── Utility ─────────────────────────────────────────────────── */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 96px 0; }
+    .text-center { text-align: center; }
+    .section-label {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #2563EB;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-size: 18px;
+      color: #64748B;
+      max-width: 600px;
+      margin: 0 auto 48px;
+    }
+
+    /* ─── Buttons ─────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: #2563EB;
+      color: #fff;
+      padding: 16px 36px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+    .btn-primary:hover {
+      background: #1D4ED8;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #2563EB;
+      padding: 16px 36px;
+      border: 2px solid rgba(37, 99, 235, 0.25);
+    }
+    .btn-secondary:hover {
+      background: rgba(37, 99, 235, 0.06);
+      border-color: #2563EB;
+    }
+    .btn-large {
+      padding: 20px 48px;
+      font-size: 18px;
+      border-radius: 14px;
+    }
+
+    /* ─── Navbar ──────────────────────────────────────────────────── */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(248, 250, 252, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+      transition: box-shadow 0.3s ease;
+    }
+    .navbar.scrolled {
+      box-shadow: 0 2px 20px rgba(15, 23, 42, 0.08);
+    }
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0F172A;
+    }
+    .logo span { color: #2563EB; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 500;
+      color: #475569;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #2563EB; }
+    .nav-cta {
+      background: #2563EB;
+      color: #fff !important;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { background: #1D4ED8; transform: translateY(-1px); }
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .mobile-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #0F172A;
+      margin: 6px 0;
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+
+    /* ─── Hero ────────────────────────────────────────────────────── */
+    .hero {
+      padding: 160px 0 100px;
+      background: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 35%, #F0F9FF 70%, #F8FAFC 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.06) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.05) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-content h1 {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .hero-content h1 .gradient-text {
+      background: linear-gradient(135deg, #2563EB, #7C3AED);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-content p {
+      font-size: 19px;
+      color: #475569;
+      margin-bottom: 36px;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    /* Hero Visual — Email-to-Website animation */
+    .hero-visual {
+      position: relative;
+      perspective: 1000px;
+    }
+    .mockup-container {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .email-mockup, .website-mockup {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(15, 23, 42, 0.05);
+      overflow: hidden;
+    }
+    .email-mockup {
+      transform: rotate(-3deg) translateY(20px);
+      position: relative;
+      z-index: 2;
+      width: 85%;
+    }
+    .website-mockup {
+      position: absolute;
+      top: -10px;
+      right: 0;
+      width: 85%;
+      z-index: 1;
+      transform: rotate(2deg);
+    }
+    .mockup-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    .mockup-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #EF4444; }
+    .dot-yellow { background: #F59E0B; }
+    .dot-green { background: #22C55E; }
+    .mockup-bar-title {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-left: 8px;
+      font-weight: 500;
+    }
+    .email-body, .website-body {
+      padding: 20px;
+    }
+    .email-field {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .email-field-label {
+      color: #94A3B8;
+      font-weight: 500;
+      min-width: 55px;
+    }
+    .email-field-value { color: #334155; }
+    .email-divider {
+      height: 1px;
+      background: #E2E8F0;
+      margin: 12px 0;
+    }
+    .email-text {
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.6;
+    }
+    .website-section {
+      background: #F1F5F9;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .website-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #2563EB;
+      margin-bottom: 6px;
+    }
+    .website-section-line {
+      height: 6px;
+      background: #CBD5E1;
+      border-radius: 3px;
+      margin-bottom: 4px;
+    }
+    .website-section-line:last-child { width: 70%; }
+
+    /* Animated arrow between mockups */
+    .arrow-connector {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      background: linear-gradient(135deg, #2563EB, #7C3AED);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+      animation: pulse-arrow 2s infinite;
+    }
+    .arrow-connector svg { width: 22px; height: 22px; fill: #fff; }
+    @keyframes pulse-arrow {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    /* ─── Social Proof ────────────────────────────────────────────── */
+    .social-proof {
+      background: #0F172A;
+      padding: 28px 0;
+    }
+    .social-proof-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .proof-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .proof-icon {
+      width: 20px;
+      height: 20px;
+      fill: #F59E0B;
+    }
+    .proof-number {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* ─── How It Works ────────────────────────────────────────────── */
+    .how-it-works { background: #fff; }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 56px;
+      left: 16.66%;
+      right: 16.66%;
+      height: 2px;
+      background: linear-gradient(90deg, #2563EB, #7C3AED);
+      opacity: 0.2;
+    }
+    .step-card {
+      text-align: center;
+      position: relative;
+    }
+    .step-number {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .step-1 .step-number { background: #EFF6FF; color: #2563EB; }
+    .step-2 .step-number { background: #F3E8FF; color: #7C3AED; }
+    .step-3 .step-number { background: #ECFDF5; color: #059669; }
+    .step-icon {
+      width: 80px;
+      height: 80px;
+      background: #F8FAFC;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      border: 1px solid #E2E8F0;
+    }
+    .step-icon svg { width: 36px; height: 36px; }
+    .step-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 10px;
+    }
+    .step-card p {
+      font-size: 15px;
+      color: #64748B;
+      line-height: 1.6;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    /* ─── Features Grid ───────────────────────────────────────────── */
+    .features { background: #F8FAFC; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 28px;
+      border: 1px solid #E2E8F0;
+      transition: all 0.3s ease;
+    }
+    .feature-card:hover {
+      border-color: rgba(37, 99, 235, 0.2);
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+      transform: translateY(-4px);
+    }
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .feature-icon svg { width: 26px; height: 26px; }
+    .fi-blue { background: #EFF6FF; }
+    .fi-blue svg { fill: #2563EB; }
+    .fi-purple { background: #F3E8FF; }
+    .fi-purple svg { fill: #7C3AED; }
+    .fi-amber { background: #FFFBEB; }
+    .fi-amber svg { fill: #D97706; }
+    .fi-green { background: #ECFDF5; }
+    .fi-green svg { fill: #059669; }
+    .fi-rose { background: #FFF1F2; }
+    .fi-rose svg { fill: #E11D48; }
+    .fi-cyan { background: #ECFEFF; }
+    .fi-cyan svg { fill: #0891B2; }
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 15px;
+      color: #64748B;
+      line-height: 1.6;
+    }
+
+    /* ─── Templates Showcase ──────────────────────────────────────── */
+    .templates { background: #fff; }
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .template-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #E2E8F0;
+      transition: all 0.3s ease;
+      background: #fff;
+    }
+    .template-card:hover {
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.1);
+      transform: translateY(-4px);
+    }
+    .template-preview {
+      height: 140px;
+      position: relative;
+      overflow: hidden;
+    }
+    .template-preview-lines {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+    }
+    .tpl-line {
+      height: 6px;
+      border-radius: 3px;
+      margin-bottom: 5px;
+      opacity: 0.5;
+    }
+    .tpl-line-short { width: 50%; }
+    .tpl-line-med { width: 75%; }
+    .tpl-header-block {
+      height: 20px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      opacity: 0.7;
+      width: 60%;
+    }
+    .template-info { padding: 16px; }
+    .template-info h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 4px;
+      text-transform: capitalize;
+    }
+    .template-info p {
+      font-size: 13px;
+      color: #64748B;
+      line-height: 1.5;
+    }
+
+    /* ─── Pricing ─────────────────────────────────────────────────── */
+    .pricing {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      color: #fff;
+    }
+    .pricing .section-label { color: #F59E0B; }
+    .pricing .section-title { color: #fff; }
+    .pricing .section-subtitle { color: #94A3B8; }
+    .pricing-card {
+      max-width: 480px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 48px 40px;
+      backdrop-filter: blur(12px);
+      text-align: center;
+      position: relative;
+    }
+    .pricing-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #0F172A;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 20px;
+      border-radius: 100px;
+      letter-spacing: 0.02em;
+    }
+    .pricing-amount {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 4px;
+      margin: 20px 0 8px;
+    }
+    .pricing-currency {
+      font-size: 28px;
+      font-weight: 600;
+      color: #94A3B8;
+    }
+    .pricing-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .pricing-period {
+      font-size: 18px;
+      color: #94A3B8;
+      font-weight: 500;
+    }
+    .pricing-trial {
+      font-size: 15px;
+      color: #F59E0B;
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 36px;
+    }
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      font-size: 16px;
+      color: #CBD5E1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .pricing-features li:last-child { border-bottom: none; }
+    .check-icon {
+      width: 22px;
+      height: 22px;
+      background: rgba(34, 197, 94, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .check-icon svg { width: 12px; height: 12px; fill: #22C55E; }
+    .pricing-card .btn-primary {
+      width: 100%;
+      padding: 18px;
+      font-size: 17px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563EB, #7C3AED);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+    }
+    .pricing-card .btn-primary:hover {
+      box-shadow: 0 12px 32px rgba(37, 99, 235, 0.5);
+      transform: translateY(-2px);
+    }
+    .pricing-guarantee {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #64748B;
+    }
+    .pricing-guarantee svg { width: 16px; height: 16px; fill: #64748B; }
+
+    /* ─── FAQ ─────────────────────────────────────────────────────── */
+    .faq { background: #F8FAFC; }
+    .faq-list {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #E2E8F0;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .faq-item:hover { border-color: rgba(37, 99, 235, 0.2); }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 20px 24px;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #0F172A;
+      cursor: pointer;
+      text-align: left;
+      gap: 16px;
+    }
+    .faq-chevron {
+      width: 24px;
+      height: 24px;
+      fill: #94A3B8;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+    .faq-answer-inner {
+      padding: 0 24px 20px;
+      font-size: 15px;
+      color: #64748B;
+      line-height: 1.7;
+    }
+
+    /* ─── Final CTA ───────────────────────────────────────────────── */
+    .final-cta {
+      background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+      padding: 96px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .final-cta h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .final-cta p {
+      font-size: 19px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .final-cta .btn {
+      background: #fff;
+      color: #2563EB;
+      padding: 20px 48px;
+      font-size: 18px;
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+    .final-cta .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ─── Footer ──────────────────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      color: #94A3B8;
+      padding: 48px 0 32px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .footer-logo span { color: #2563EB; }
+    .footer-tagline {
+      font-size: 14px;
+      color: #64748B;
+      margin-top: 6px;
+    }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a {
+      font-size: 14px;
+      color: #94A3B8;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #fff; }
+    .footer-bottom {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 13px;
+    }
+
+    /* ─── Mobile Responsive ───────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-content p { margin-left: auto; margin-right: auto; }
+      .hero-buttons { justify-content: center; }
+      .hero-visual { margin-top: 40px; }
+      .steps-grid { grid-template-columns: 1fr; gap: 40px; }
+      .steps-grid::before { display: none; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .mobile-toggle { display: block; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: #fff;
+        padding: 24px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        border-bottom: 1px solid #E2E8F0;
+        gap: 16px;
+      }
+      .features-grid { grid-template-columns: 1fr; }
+      .templates-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-buttons { flex-direction: column; align-items: stretch; }
+      .section-pad { padding: 64px 0; }
+      .pricing-card { padding: 36px 24px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Navbar ═══ -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar-inner">
+      <a href="/" class="logo">Email<span>Site</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#templates">Templates</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="/signup" class="nav-cta">Start Free Trial</a>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══ Hero ═══ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <h1>Update Your Website by <span class="gradient-text">Sending an Email</span></h1>
+        <p>No logins. No dashboards. No code. Just send an email and your site updates instantly.</p>
+        <div class="hero-buttons">
+          <a href="/signup" class="btn btn-primary btn-large">Start Free Trial</a>
+          <a href="#how-it-works" class="btn btn-secondary btn-large">See How It Works</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="mockup-container">
+          <!-- Email mockup -->
+          <div class="email-mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dot dot-red"></div>
+              <div class="mockup-dot dot-yellow"></div>
+              <div class="mockup-dot dot-green"></div>
+              <span class="mockup-bar-title">Compose Email</span>
+            </div>
+            <div class="email-body">
+              <div class="email-field">
+                <span class="email-field-label">To:</span>
+                <span class="email-field-value">update@emailsite.co</span>
+              </div>
+              <div class="email-field">
+                <span class="email-field-label">Subject:</span>
+                <span class="email-field-value">Update About Section</span>
+              </div>
+              <div class="email-divider"></div>
+              <div class="email-text">
+                We are a family bakery founded in 2010. Our passion is crafting fresh bread and pastries every morning...
+              </div>
+            </div>
+          </div>
+          <!-- Arrow -->
+          <div class="arrow-connector">
+            <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+          </div>
+          <!-- Website mockup -->
+          <div class="website-mockup">
+            <div class="mockup-bar">
+              <div class="mockup-dot dot-red"></div>
+              <div class="mockup-dot dot-yellow"></div>
+              <div class="mockup-dot dot-green"></div>
+              <span class="mockup-bar-title">mybakery.emailsite.co</span>
+            </div>
+            <div class="website-body">
+              <div class="website-section">
+                <div class="website-section-title">About Us</div>
+                <div class="website-section-line" style="width:100%"></div>
+                <div class="website-section-line" style="width:90%"></div>
+                <div class="website-section-line" style="width:60%"></div>
+              </div>
+              <div class="website-section">
+                <div class="website-section-title">Menu</div>
+                <div class="website-section-line" style="width:80%"></div>
+                <div class="website-section-line" style="width:95%"></div>
+              </div>
+              <div class="website-section" style="background:#ECFDF5;">
+                <div class="website-section-title" style="color:#059669;">Updated!</div>
+                <div class="website-section-line" style="background:#A7F3D0;width:100%"></div>
+                <div class="website-section-line" style="background:#A7F3D0;width:75%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Social Proof ═══ -->
+  <section class="social-proof">
+    <div class="container">
+      <div class="social-proof-inner">
+        <div class="proof-item">
+          <svg class="proof-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <span>Trusted by <span class="proof-number">500+</span> small businesses</span>
+        </div>
+        <div class="proof-item">
+          <svg class="proof-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 00-1.38-3.56A8.03 8.03 0 0118.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.987 7.987 0 015.08 16zm2.95-8H5.08a7.987 7.987 0 014.33-3.56A15.65 15.65 0 008.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 01-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+          <span><span class="proof-number">15,000+</span> website updates made</span>
+        </div>
+        <div class="proof-item">
+          <svg class="proof-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span><span class="proof-number">4.9/5</span> average rating</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ How It Works ═══ -->
+  <section class="how-it-works section-pad" id="how-it-works">
+    <div class="container text-center">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">Three steps. That's it.</h2>
+      <p class="section-subtitle">No learning curve. If you can send an email, you can update your website.</p>
+
+      <div class="steps-grid">
+        <div class="step-card step-1">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+          </div>
+          <div class="step-number">1</div>
+          <h3>Send an Email</h3>
+          <p>Write what you want to change. Use the subject line to pick the section.</p>
+        </div>
+        <div class="step-card step-2">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="step-number">2</div>
+          <h3>Preview &amp; Confirm</h3>
+          <p>We send you a preview. Reply YES to publish.</p>
+        </div>
+        <div class="step-card step-3">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="step-number">3</div>
+          <h3>Your Site Updates</h3>
+          <p>That's it. Your website is live with the changes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Features ═══ -->
+  <section class="features section-pad" id="features">
+    <div class="container text-center">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">Everything you need, nothing you don't</h2>
+      <p class="section-subtitle">A simple website builder for people who hate website builders.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon fi-blue">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <h3>Email-Powered Updates</h3>
+          <p>Send an email, your website updates. It really is that simple. No login, no dashboard, no hassle.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-purple">
+            <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+          </div>
+          <h3>10 Beautiful Templates</h3>
+          <p>Pick from ten professionally designed templates. Switch anytime with a single email.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-amber">
+            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          </div>
+          <h3>Image Support</h3>
+          <p>Just attach photos to your email. We handle the rest -- resizing, optimizing, and placing them on your site.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-green">
+            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0013 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+          </div>
+          <h3>Version History &amp; Undo</h3>
+          <p>Made a mistake? Every change is saved. Roll back to any previous version with one email.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-rose">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          </div>
+          <h3>Custom Domain Support</h3>
+          <p>Use your own domain name. We handle the SSL certificate and DNS setup guidance.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-cyan">
+            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          </div>
+          <h3>Preview Before Publishing</h3>
+          <p>Every change gets a preview first. Nothing goes live until you reply YES. Stay in control.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Templates ═══ -->
+  <section class="templates section-pad" id="templates">
+    <div class="container text-center">
+      <span class="section-label">Templates</span>
+      <h2 class="section-title">Start with a beautiful template</h2>
+      <p class="section-subtitle">Ten professionally designed templates for any kind of business or project.</p>
+
+      <div class="templates-grid">
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#fff;"></div>
+              <div class="tpl-line" style="background:#fff;"></div>
+              <div class="tpl-line tpl-line-short" style="background:#fff;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Starter</h4><p>Clean and minimal. Perfect for getting started quickly.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #0F172A, #334155);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#F59E0B;"></div>
+              <div class="tpl-line" style="background:#94A3B8;"></div>
+              <div class="tpl-line tpl-line-med" style="background:#94A3B8;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Business</h4><p>Professional and polished for established companies.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #7C3AED, #5B21B6);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#E9D5FF;"></div>
+              <div class="tpl-line" style="background:#C4B5FD;"></div>
+              <div class="tpl-line tpl-line-short" style="background:#C4B5FD;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Portfolio</h4><p>Showcase your work with style and elegance.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#FEE2E2;"></div>
+              <div class="tpl-line" style="background:#FECACA;"></div>
+              <div class="tpl-line tpl-line-med" style="background:#FECACA;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Restaurant</h4><p>Warm and inviting. Built for menus and hours.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #0891B2, #155E75);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#CFFAFE;"></div>
+              <div class="tpl-line" style="background:#A5F3FC;"></div>
+              <div class="tpl-line tpl-line-short" style="background:#A5F3FC;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Consultant</h4><p>Trust-building design for service professionals.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #059669, #065F46);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#D1FAE5;"></div>
+              <div class="tpl-line" style="background:#A7F3D0;"></div>
+              <div class="tpl-line tpl-line-med" style="background:#A7F3D0;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Retail</h4><p>Bright and engaging for shops and storefronts.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #2563EB, #7C3AED);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#fff;"></div>
+              <div class="tpl-line" style="background:#DBEAFE;"></div>
+              <div class="tpl-line tpl-line-short" style="background:#DBEAFE;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Nonprofit</h4><p>Mission-driven design that inspires action.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#FFFBEB;"></div>
+              <div class="tpl-line" style="background:#FDE68A;"></div>
+              <div class="tpl-line tpl-line-med" style="background:#FDE68A;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Personal</h4><p>Your corner of the internet. Simple and personal.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #78716C, #44403C);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#F5F5F4;"></div>
+              <div class="tpl-line" style="background:#D6D3D1;"></div>
+              <div class="tpl-line tpl-line-short" style="background:#D6D3D1;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Trades</h4><p>Sturdy and reliable for contractors and tradespeople.</p></div>
+        </div>
+        <div class="template-card">
+          <div class="template-preview" style="background: linear-gradient(135deg, #EC4899, #BE185D);">
+            <div class="template-preview-lines">
+              <div class="tpl-header-block" style="background:#FCE7F3;"></div>
+              <div class="tpl-line" style="background:#FBCFE8;"></div>
+              <div class="tpl-line tpl-line-med" style="background:#FBCFE8;"></div>
+            </div>
+          </div>
+          <div class="template-info"><h4>Wellness</h4><p>Calm and soothing for health and wellness brands.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Pricing ═══ -->
+  <section class="pricing section-pad" id="pricing">
+    <div class="container text-center">
+      <span class="section-label">Pricing</span>
+      <h2 class="section-title">Simple pricing. No surprises.</h2>
+      <p class="section-subtitle">One plan with everything included. Start free, upgrade when you're ready.</p>
+
+      <div class="pricing-card">
+        <div class="pricing-badge">14-Day Free Trial</div>
+        <div class="pricing-amount">
+          <span class="pricing-currency">$</span>
+          <span class="pricing-value">19</span>
+          <span class="pricing-period">/month</span>
+        </div>
+        <p class="pricing-trial">Try free for 14 days. No credit card required.</p>
+        <ul class="pricing-features">
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+            Unlimited website updates
+          </li>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+            All 10 templates included
+          </li>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+            Custom domain support
+          </li>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+            Image uploads via email
+          </li>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+            Full version history &amp; undo
+          </li>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+            Email support
+          </li>
+        </ul>
+        <a href="/signup" class="btn btn-primary">Start Free Trial</a>
+        <div class="pricing-guarantee">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+          30-day money-back guarantee
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <section class="faq section-pad" id="faq">
+    <div class="container text-center">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Frequently asked questions</h2>
+      <p class="section-subtitle">Got questions? We have answers.</p>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How do I update my website?
+            <svg class="faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Just send an email to your unique EmailSite address. Use the subject line to specify which section you want to update (like "About", "Menu", or "Services"), and write your new content in the body of the email. We'll send you a preview to review, and once you reply YES, your site goes live with the changes. The whole process takes under a minute.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What if I make a mistake?
+            <svg class="faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              No worries! Every change you make is saved in your version history. You can roll back to any previous version by sending an email with the subject "Undo" or "Rollback". We keep your full history so nothing is ever lost. Plus, every change requires your explicit confirmation before going live, so you always get a chance to review first.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can I use my own domain?
+            <svg class="faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Absolutely! You start with a free subdomain (yourname.emailsite.co), and you can connect your own custom domain at any time. We provide step-by-step instructions for updating your DNS settings, and we automatically provision and renew your SSL certificate so your site is always secure. There is no extra charge for custom domains.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What does the site look like?
+            <svg class="faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Your site will look modern, professional, and fully responsive on any device. We offer 10 beautiful templates designed by professionals -- from clean minimalist designs to bold, colorful layouts. Each template is mobile-friendly and optimized for fast loading. You choose a template when you sign up, and you can switch templates anytime by email.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How do I add images?
+            <svg class="faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Just attach images to your email, the same way you would send photos to a friend. We automatically optimize them for the web (resizing, compressing, and converting to modern formats) and place them in the right section of your site. You can attach multiple images at once, and supported formats include JPG, PNG, GIF, and WebP.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can I cancel anytime?
+            <svg class="faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes, you can cancel your subscription at any time with no questions asked. There are no contracts or cancellation fees. If you cancel within the first 30 days, we will give you a full refund. After cancellation, your site remains live until the end of your current billing period. You can also export your content at any time.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Final CTA ═══ -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Ready to ditch your dashboard?</h2>
+      <p>Start your free trial today. No credit card required.</p>
+      <a href="/signup" class="btn btn-large">Start Free Trial &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-logo">Email<span>Site</span></div>
+          <p class="footer-tagline">Made for people who just want their website to work.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#how-it-works">How It Works</a>
+          <a href="#features">Features</a>
+          <a href="#templates">Templates</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+          <a href="/signup">Sign Up</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 EmailSite. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Navbar scroll effect ───────────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // ─── Mobile menu toggle ─────────────────────────────────────────
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    mobileToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    // Close mobile menu on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // ─── FAQ accordion ──────────────────────────────────────────────
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const answer = item.querySelector('.faq-answer');
+        const isOpen = item.classList.contains('open');
+
+        // Close all other items
+        document.querySelectorAll('.faq-item.open').forEach(openItem => {
+          if (openItem !== item) {
+            openItem.classList.remove('open');
+            openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+            openItem.querySelector('.faq-answer').style.maxHeight = '0';
+          }
+        });
+
+        // Toggle current item
+        if (isOpen) {
+          item.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          answer.style.maxHeight = '0';
+        } else {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+      });
+    });
+
+    // ─── Smooth reveal on scroll (intersection observer) ────────────
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.step-card, .feature-card, .template-card, .pricing-card, .faq-item').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
