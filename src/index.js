@@ -118,7 +118,7 @@ app.listen(config.port, () => {
       const { queries } = require('./db');
       queries.expirePendingUpdates();
     } catch (err) {
-      // ignore
+      logger.warn('Error expiring pending updates', { error: err.message });
     }
   }, 60000);
 });

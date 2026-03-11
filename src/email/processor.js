@@ -334,7 +334,15 @@ async function handleUndo(tenant) {
 
   // Roll back to the previous version
   const history = queries.getContentHistory(tenant.id, mostRecentSection);
-  const previousVersion = history[1].version; // Second entry is previous version
+  if (history.length < 2) {
+    await sender.sendGenericReply(
+      tenant.email,
+      'Nothing to Undo',
+      'There are no previous versions to roll back to.'
+    );
+    return;
+  }
+  const previousVersion = history[1].version;
 
   const rolledBack = queries.rollbackContent(tenant.id, mostRecentSection, previousVersion);
 

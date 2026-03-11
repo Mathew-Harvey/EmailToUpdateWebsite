@@ -107,7 +107,8 @@ function extractImages(parsed) {
   }
 
   for (const attachment of parsed.attachments) {
-    if (attachment.contentType && attachment.contentType.startsWith('image/')) {
+    const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (attachment.contentType && ALLOWED_IMAGE_TYPES.includes(attachment.contentType)) {
       images.push({
         filename: attachment.filename || `image_${Date.now()}_${images.length}.${attachment.contentType.split('/')[1] || 'png'}`,
         content: attachment.content,

@@ -70,7 +70,7 @@ router.get('/confirm/:token', (req, res) => {
         </div>
         <script>
           async function handleAction(action) {
-            const res = await fetch('/api/confirm/' + '${pending.confirmation_token}' + '/' + action, { method: 'POST' });
+            const res = await fetch('/api/confirm/' + encodeURIComponent('${pending.confirmation_token}') + '/' + action, { method: 'POST' });
             const data = await res.json();
             const el = document.getElementById('result');
             if (data.success) {
